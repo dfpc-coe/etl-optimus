@@ -1,6 +1,6 @@
-<h1 align='center'>ETL-Template</h1>
+<h1 align='center'>ETL-Optimus</h1>
 
-<p align='center'>Template Repository for creating new ETLs</p>
+<p align='center'>Support brining Optimus GPS Fleet Tracking into TAK</p>
 
 ## Development
 

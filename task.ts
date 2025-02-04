@@ -1,25 +1,17 @@
 import { Static, Type, TSchema } from '@sinclair/typebox';
 import type { Event } from '@tak-ps/etl';
-import ETL, { SchemaType, handler as internal, local, InputFeature, InputFeatureCollection, DataFlowType, InvocationType } from '@tak-ps/etl';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars --  Fetch with an additional Response.typed(TypeBox Object) definition
+import ETL, { SchemaType, handler as internal, local, InputFeatureCollection, DataFlowType, InvocationType } from '@tak-ps/etl';
 import { fetch } from '@tak-ps/etl';
 
-/**
- * The Input Schema contains the environment object that will be requested via the CloudTAK UI
- * It should be a valid TypeBox object - https://github.com/sinclairzx81/typebox
- */
 const InputSchema = Type.Object({
-    'DEBUG': Type.Boolean({
+    OptimusClientID: Type.String(),
+    OptimusAPIToken: Type.String(),
+    DEBUG: Type.Boolean({
         default: false,
         description: 'Print results in logs'
     })
 });
 
-/**
- * The Output Schema contains the known properties that will be returned on the
- * GeoJSON Feature in the .properties.metdata object
- */
 const OutputSchema = Type.Object({})
 
 export default class Task extends ETL {
@@ -43,19 +35,18 @@ export default class Task extends ETL {
     }
 
     async control(): Promise<void> {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Get the Environment from the Server and ensure it conforms to the schema
         const env = await this.env(InputSchema);
-
-        const features: Static<typeof InputFeature>[] = [];
-
-        // Get things here and convert them to GeoJSON Feature Collections
-        // That conform to the node-cot Feature properties spec
-        // https://github.com/dfpc-coe/node-CoT/
 
         const fc: Static<typeof InputFeatureCollection> = {
             type: 'FeatureCollection',
-            features: features
+            features: []
         }
+
+        await fetch(`https://api3p.optimushn.com/api/v1/${env.OptimusClientID}/position/latest`, {
+            headers: {
+                'api-key': env.OptimusAPIToken
+            }
+        });
 
         await this.submit(fc);
     }
