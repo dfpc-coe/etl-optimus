@@ -10,6 +10,10 @@
 
 ## Version History
 
+### v1.1.0
+
+- :tada: Pass through objects with a 48 hour timeout
+
 ### v1.0.0
 
 - :rocket: Initial Approach

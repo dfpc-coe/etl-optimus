@@ -12,10 +12,26 @@ const InputSchema = Type.Object({
     })
 });
 
-const OutputSchema = Type.Object({})
+const OutputSchema = Type.Object({
+    id: Type.Number(),
+    latitude: Type.Number(),
+    longitude: Type.Number(),
+    deviceId: Type.Integer(),
+    utcDate: Type.String({ format: 'date-time' }),
+    speed: Type.Number(),
+    azimuth: Type.Number(),
+    altitude: Type.Number(),
+    signal: Type.Number(),
+    battery: Type.Number(),
+    isOn: Type.Boolean(),
+    isIdle: Type.Boolean(),
+    tanks: Type.Unknown(),
+    thermometers: Type.Unknown(),
+    events: Type.Array(Type.Unknown())
+})
 
 export default class Task extends ETL {
-    static name = 'default'
+    static name = 'etl-optimus'
     static flow = [ DataFlowType.Incoming ];
     static invocation = [ InvocationType.Schedule ];
 
@@ -42,11 +58,40 @@ export default class Task extends ETL {
             features: []
         }
 
-        await fetch(`https://api3p.optimushn.com/api/v1/${env.OptimusClientID}/position/latest`, {
+
+        const res = await fetch(`https://api3p.optimustracking.com/v1/clients/${env.OptimusClientID}/position/latest`, {
             headers: {
+                Accept: 'application/json',
                 'api-key': env.OptimusAPIToken
             }
         });
+
+        const devices = await res.typed(Type.Array(OutputSchema))
+
+        const future = new Date();
+        future.setTime(future.getTime() + 172800000);
+
+        for (const device of devices) {
+            if (new Date(device.utcDate) < future) {
+                fc.features.push({
+                    id: device.id,
+                    type: 'Feature',
+                    properties: {
+                        speed: device.speed,
+                        course: device.course,
+                        metadata: device,
+                    },
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [
+                            device.longitude,
+                            device.latitude,
+                            device.altitude
+                        ]
+                    }
+                });
+            }
+        }
 
         await this.submit(fc);
     }
