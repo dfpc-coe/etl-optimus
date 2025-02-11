@@ -74,11 +74,11 @@ export default class Task extends ETL {
         for (const device of devices) {
             if (new Date(device.utcDate) < future) {
                 fc.features.push({
-                    id: device.id,
+                    id: String(device.id),
                     type: 'Feature',
                     properties: {
                         speed: device.speed,
-                        course: device.course,
+                        course: device.azimuth,
                         metadata: device,
                     },
                     geometry: {
