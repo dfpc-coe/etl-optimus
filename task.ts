@@ -77,6 +77,9 @@ export default class Task extends ETL {
                     id: String(device.id),
                     type: 'Feature',
                     properties: {
+                        type: 'a-h-G',
+                        how: 'm-g',
+                        callsign: 'Optimus',
                         speed: device.speed,
                         course: device.azimuth,
                         metadata: device,
