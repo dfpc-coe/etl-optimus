@@ -10,6 +10,10 @@
 
 ## Version History
 
+### v1.3.1
+
+- :bug: Typescript was throwing an error on a deep child dependency
+
 ### v1.3.0
 
 - :tada: Pull in Device Callsign
