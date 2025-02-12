@@ -10,6 +10,10 @@
 
 ## Version History
 
+### v1.3.0
+
+- :tada: Pull in Device Callsign
+
 ### v1.2.0
 
 - :rocket: Add Callsign and make Hostile

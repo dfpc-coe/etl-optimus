@@ -12,7 +12,7 @@ const InputSchema = Type.Object({
     })
 });
 
-const OutputSchema = Type.Object({
+const Position = Type.Object({
     id: Type.Number(),
     latitude: Type.Number(),
     longitude: Type.Number(),
@@ -29,6 +29,17 @@ const OutputSchema = Type.Object({
     thermometers: Type.Unknown(),
     events: Type.Array(Type.Unknown())
 })
+
+const Device = Type.Object({
+    id: Type.Integer(),
+    clientId: Type.Integer(),
+    pin: Type.String(),
+    description: Type.String(),
+    utcOffsetMinutes: Type.Integer(),
+    extra: Type.Record(Type.String(), Type.String())
+});
+
+const OutputSchema = Position;
 
 export default class Task extends ETL {
     static name = 'etl-optimus'
@@ -66,30 +77,46 @@ export default class Task extends ETL {
             }
         });
 
-        const devices = await res.typed(Type.Array(OutputSchema))
+        const positions = await res.typed(Type.Array(Position))
+
+        const devRes = await fetch(`https://api3p.optimustracking.com/v1/clients/${env.OptimusClientID}/devices`, {
+            headers: {
+                Accept: 'application/json',
+                'api-key': env.OptimusAPIToken
+            }
+        });
+
+        const devices = await devRes.typed(Type.Array(Device))
+
+        const deviceMap = new Map<number, Static<typeof Device>>();
+        devices.forEach((device) => {
+            deviceMap.set(device.id, device);
+        });
 
         const future = new Date();
         future.setTime(future.getTime() + 172800000);
 
-        for (const device of devices) {
-            if (new Date(device.utcDate) < future) {
+        for (const position of positions) {
+            if (new Date(position.utcDate) < future) {
+                const device = deviceMap.get(position.deviceId);
+
                 fc.features.push({
-                    id: String(device.id),
+                    id: String(position.deviceId),
                     type: 'Feature',
                     properties: {
                         type: 'a-h-G',
                         how: 'm-g',
-                        callsign: 'Optimus',
-                        speed: device.speed,
-                        course: device.azimuth,
-                        metadata: device,
+                        callsign: device.description || 'Optimus',
+                        speed: position.speed,
+                        course: position.azimuth,
+                        metadata: position
                     },
                     geometry: {
                         type: 'Point',
                         coordinates: [
-                            device.longitude,
-                            device.latitude,
-                            device.altitude
+                            position.longitude,
+                            position.latitude,
+                            position.altitude
                         ]
                     }
                 });
