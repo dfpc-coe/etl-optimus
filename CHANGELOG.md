@@ -10,6 +10,10 @@
 
 ## Version History
 
+### v1.4.0
+
+- :bug: Remove Events field
+
 ### v1.3.1
 
 - :bug: Typescript was throwing an error on a deep child dependency

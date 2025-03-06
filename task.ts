@@ -27,7 +27,6 @@ const Position = Type.Object({
     isIdle: Type.Boolean(),
     tanks: Type.Unknown(),
     thermometers: Type.Unknown(),
-    events: Type.Array(Type.Unknown())
 })
 
 const Device = Type.Object({
@@ -68,7 +67,6 @@ export default class Task extends ETL {
             type: 'FeatureCollection',
             features: []
         }
-
 
         const res = await fetch(`https://api3p.optimustracking.com/v1/clients/${env.OptimusClientID}/position/latest`, {
             headers: {
