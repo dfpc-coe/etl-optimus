@@ -10,6 +10,10 @@
 
 ## Version History
 
+### v1.5.0
+
+- :bug: Convert KM/H to M/S
+
 ### v1.4.0
 
 - :bug: Remove Events field

@@ -105,7 +105,7 @@ export default class Task extends ETL {
                         type: 'a-h-G',
                         how: 'm-g',
                         callsign: device.description || 'Optimus',
-                        speed: position.speed,
+                        speed: position.speed * 0.277778,
                         course: position.azimuth,
                         metadata: position
                     },
