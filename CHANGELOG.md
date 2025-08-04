@@ -10,6 +10,10 @@
 
 ## Version History
 
+### v1.6.0
+
+- :arrow_up: Update Core Deps
+
 ### v1.5.0
 
 - :bug: Convert KM/H to M/S
