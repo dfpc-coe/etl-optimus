@@ -1,6 +1,7 @@
 import { Static, Type, TSchema } from '@sinclair/typebox';
+import { Feature } from '@tak-ps/node-cot';
 import type { Event } from '@tak-ps/etl';
-import ETL, { SchemaType, handler as internal, local, InputFeatureCollection, DataFlowType, InvocationType } from '@tak-ps/etl';
+import ETL, { SchemaType, handler as internal, local, DataFlowType, InvocationType } from '@tak-ps/etl';
 import { fetch } from '@tak-ps/etl';
 
 const InputSchema = Type.Object({
@@ -63,7 +64,7 @@ export default class Task extends ETL {
     async control(): Promise<void> {
         const env = await this.env(InputSchema);
 
-        const fc: Static<typeof InputFeatureCollection> = {
+        const fc: Static<typeof Feature.InputFeatureCollection> = {
             type: 'FeatureCollection',
             features: []
         }
