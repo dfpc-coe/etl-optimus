@@ -2,6 +2,28 @@
 
 <p align='center'>Support brining Optimus GPS Fleet Tracking into TAK</p>
 
+## Setup
+
+1. Determine if your account is configured as an Optimus or Optimus Pro account. Only Optimus Pro accounts are supported for ingestion into TAK. You can determine which account type you have from the [Login Page](https://optimustracker.com/pages/log-in)
+
+![](assets/2026-01-16-11-40-23-image.png)
+
+2. If you have an Optimus Tracker account and not an Optimus Pro account, contact support to have your account converted. There is no additional charge, just a more modern map UI for managing trackers and allowing external data integrations.
+
+3. Once you have access to the Optimus Pro Account, from the main map page, click the menu button in the upper right-hand corner and then click "Integrations"
+   
+   ![](assets/2026-01-16-11-42-07-image.png)
+
+4. Activate the Optimus API 3P
+
+![](assets/2026-01-16-11-42-45-image.png)
+
+
+
+5. Give the TAK Administrator the API Key & Client ID
+
+![](assets/2026-01-16-11-43-09-image.png)
+
 ## Development
 
 DFPC provided Lambda ETLs are currently all written in [NodeJS](https://nodejs.org/en) through the use of a AWS Lambda optimized
@@ -42,4 +64,3 @@ Github actions will build and push docker releases on every version tag which ca
 CloudTAK API.
 
 Non-DFPC users will need to setup their own docker => ECS build system via something like Github Actions or AWS Codebuild.
-
