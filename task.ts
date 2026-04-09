@@ -98,6 +98,7 @@ export default class Task extends ETL {
         for (const position of positions) {
             if (new Date(position.utcDate) < future) {
                 const device = deviceMap.get(position.deviceId);
+                if (!device) continue;
 
                 fc.features.push({
                     id: String(position.deviceId),
