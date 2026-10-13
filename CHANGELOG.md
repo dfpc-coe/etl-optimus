@@ -10,6 +10,10 @@
 
 ## Version History
 
+### v1.18.0
+
+- :arrow_up: Update Core Dependencies
+
 ### Pending Release
 
 - :rocket: Submit positions as the named `position` schema to the `/connection/:connection/submit` API instead of the legacy `/layer/:layer/cot` API
