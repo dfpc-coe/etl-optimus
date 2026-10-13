@@ -1,7 +1,6 @@
 import { Static, Type, TSchema } from '@sinclair/typebox';
-import { Feature } from '@tak-ps/node-cot';
-import type { Event } from '@tak-ps/etl';
-import ETL, { SchemaType, handler as internal, local, DataFlowType, InvocationType } from '@tak-ps/etl';
+import type { Event, NamedSchema } from '@tak-ps/etl';
+import ETL, { SchemaType, handler as internal, local, DataFlowType, InvocationType, SubmitFeatureCollection } from '@tak-ps/etl';
 import { fetch } from '@tak-ps/etl';
 
 const InputSchema = Type.Object({
@@ -40,6 +39,7 @@ const Device = Type.Object({
 });
 
 const OutputSchema = Position;
+const SCHEMA_POSITION = 'position';
 
 export default class Task extends ETL {
     static name = 'etl-optimus'
@@ -49,12 +49,12 @@ export default class Task extends ETL {
     async schema(
         type: SchemaType = SchemaType.Input,
         flow: DataFlowType = DataFlowType.Incoming
-    ): Promise<TSchema> {
+    ): Promise<TSchema | Array<NamedSchema>> {
         if (flow === DataFlowType.Incoming) {
             if (type === SchemaType.Input) {
                 return InputSchema;
             } else {
-                return OutputSchema;
+                return [{ id: SCHEMA_POSITION, schema: OutputSchema }];
             }
         } else {
             return Type.Object({});
@@ -64,10 +64,11 @@ export default class Task extends ETL {
     async control(): Promise<void> {
         const env = await this.env(InputSchema);
 
-        const fc: Static<typeof Feature.InputFeatureCollection> = {
+        const fc: Static<typeof SubmitFeatureCollection> = {
             type: 'FeatureCollection',
+            schema: SCHEMA_POSITION,
             features: []
-        }
+        };
 
         const res = await fetch(`https://api3p.optimustracking.com/v1/clients/${env.OptimusClientID}/position/latest`, {
             headers: {

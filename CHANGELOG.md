@@ -10,6 +10,11 @@
 
 ## Version History
 
+### Pending Release
+
+- :rocket: Submit positions as the named `position` schema to the `/connection/:connection/submit` API instead of the legacy `/layer/:layer/cot` API
+- :arrow_up: Update `@tak-ps/etl` to `10.21.0`
+
 ### v1.17.0
 
 - :rocket: Add Capabilities document
