@@ -24,6 +24,11 @@
 
 ![](assets/2026-01-16-11-43-09-image.png)
 
+6. If necessary, you can adjust the frequency the devices report their location from the main map page by opening the control panel on the right side of the map, selecting the appropriate unit, and clicking the 'cmd' button. This opens a dialog where you can adjust the reporting interval.
+
+<img width="1284" height="767" alt="tracker settings" src="https://github.com/user-attachments/assets/14914cc3-8bae-4693-b144-cef613cf662e" />
+
+
 ## Development
 
 DFPC provided Lambda ETLs are currently all written in [NodeJS](https://nodejs.org/en) through the use of a AWS Lambda optimized
